@@ -32,7 +32,7 @@ different persistence mechanism, but which otherwise has the same features.
   * Use _Extract Class_ to create a new class representing the timelog
   application. Give the new class a constructor taking the file's name as a
   parameter.
-  * Mive the ```report``` and ```log``` methods over to the new class.
+  * Move the ```report``` and ```log``` methods over to the new class.
   * Refactor the tests to use those new methods. Is the environment variable
   needed now?
   * That last change lost us some test coverage. Is that a problem? What would
@@ -56,8 +56,8 @@ different persistence mechanism, but which otherwise has the same features.
   up into the tests and the top-level script. This deliberately introduces a
   little duplication; what are the mitigating factors in this case?
 
-### Exercise 16.7 Open Secrets
+#### Exercise 16.7 Open Secrets
 
   * Fix these open secrets by introducing a new class to wrap the SCV strings.
   Look for opportunities to move code into the new class. Can ypou use the new
-  class to simnplify any of the tests?
+  class to simplify any of the tests?
