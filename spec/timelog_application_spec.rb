@@ -47,4 +47,15 @@ RSpec.describe TimelogApplication do
   def run(options)
     `ruby lib/timelog.rb #{options}`
   end
+
+  def log(logging_options)
+    timelog_application = TimelogApplication.new(TIMELOG_FILE_NAME)
+    timelog_application.log(logging_options)
+  end
+
+  def report(reporting_options)
+    timelog_application = TimelogApplication.new(TIMELOG_FILE_NAME)
+    timelog_application.report(reporting_options)
+  end
+
 end
