@@ -2,10 +2,10 @@ require "spec_helper"
 require_relative "../lib/timelog_application"
 
 RSpec.describe TimelogApplication do
-  TIMELOG_FILE_NAME = "timelog.txt"
+  SPEC_TIMELOG_FILE_NAME = "timelog.txt"
 
   before do
-    File.delete(TIMELOG_FILE_NAME) if File.exist?(TIMELOG_FILE_NAME)
+    File.delete(SPEC_TIMELOG_FILE_NAME) if File.exist?(SPEC_TIMELOG_FILE_NAME)
 
     log(user: "fred", project: "project-1", hours: 6.0)
     log(user: "jim", project: "project-1", hours: 7.0)
@@ -13,7 +13,7 @@ RSpec.describe TimelogApplication do
   end
 
   after do
-    File.delete(TIMELOG_FILE_NAME) if File.exist?(TIMELOG_FILE_NAME)
+    File.delete(SPEC_TIMELOG_FILE_NAME) if File.exist?(SPEC_TIMELOG_FILE_NAME)
   end
 
   it "project total" do
@@ -47,12 +47,12 @@ RSpec.describe TimelogApplication do
   end
 
   def log(logging_options)
-    timelog_application = TimelogApplication.new(TIMELOG_FILE_NAME)
+    timelog_application = TimelogApplication.new(SPEC_TIMELOG_FILE_NAME)
     timelog_application.log(OpenStruct.new(logging_options))
   end
 
   def report(reporting_options)
-    timelog_application = TimelogApplication.new(TIMELOG_FILE_NAME)
+    timelog_application = TimelogApplication.new(SPEC_TIMELOG_FILE_NAME)
     timelog_application.report(OpenStruct.new(reporting_options))
   end
 
