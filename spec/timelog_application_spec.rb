@@ -4,7 +4,6 @@ require_relative "../lib/timelog_application"
 
 RSpec.describe TimelogApplication do
   before do
-    @timelog_size = File.size(TIMELOG_FILE) if File.exist?(TIMELOG_FILE)
     File.delete(TIMELOG_FILE_NAME) if File.exist?(TIMELOG_FILE_NAME)
 
     log(options(user: "fred", project: "project-1", hours: 6.0))
@@ -13,9 +12,6 @@ RSpec.describe TimelogApplication do
   end
 
   after do
-    if File.exist?(TIMELOG_FILE)
-      expect(@timelog_size).to eq(File.size(TIMELOG_FILE)), "log file #{TIMELOG_FILE} should be unchanged"
-    end
     File.delete(TIMELOG_FILE_NAME) if File.exist?(TIMELOG_FILE_NAME)
   end
 
