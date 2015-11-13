@@ -7,9 +7,9 @@ RSpec.describe TimelogApplication do
     @timelog_size = File.size(TIMELOG_FILE) if File.exist?(TIMELOG_FILE)
     File.delete(TIMELOG_FILE_NAME) if File.exist?(TIMELOG_FILE_NAME)
 
-    log(OpenStruct.new(user: "fred", project: "project-1", hours: 6.0))
-    log(OpenStruct.new(user: "jim", project: "project-1", hours: 7.0))
-    log(OpenStruct.new(user: "alice", project: "project-1", hours: 4.5))
+    log(options(user: "fred", project: "project-1", hours: 6.0))
+    log(options(user: "jim", project: "project-1", hours: 7.0))
+    log(options(user: "alice", project: "project-1", hours: 4.5))
   end
 
   after do
@@ -20,7 +20,7 @@ RSpec.describe TimelogApplication do
   end
 
   it "project total" do
-    reporting_options = OpenStruct.new(project: "project-1")
+    reporting_options = options(project: "project-1")
 
     result = report(reporting_options).split("\n")[-1]
 
@@ -28,7 +28,7 @@ RSpec.describe TimelogApplication do
   end
 
   it "project total for missing project" do
-    reporting_options = OpenStruct.new(project: "project-2")
+    reporting_options = options(project: "project-2")
 
     result = report(reporting_options).split("\n")[-1]
 
@@ -36,7 +36,7 @@ RSpec.describe TimelogApplication do
   end
 
   it "user total" do
-    reporting_options = OpenStruct.new(user: "fred", project: "project-1")
+    reporting_options = options(user: "fred", project: "project-1")
 
     result = report(reporting_options).split("\n")[-1]
 
@@ -44,7 +44,7 @@ RSpec.describe TimelogApplication do
   end
 
   it "user total for missing user" do
-    reporting_options = OpenStruct.new(user: "harry", project: "project-1")
+    reporting_options = options(user: "harry", project: "project-1")
 
     result = report(reporting_options).split("\n")[-1]
 
@@ -52,7 +52,7 @@ RSpec.describe TimelogApplication do
   end
 
   it "user total for missing project" do
-    reporting_options = OpenStruct.new(user: "fred", project: "project-2")
+    reporting_options = options(user: "fred", project: "project-2")
 
     result = report(reporting_options).split("\n")[-1]
 
@@ -67,6 +67,10 @@ RSpec.describe TimelogApplication do
   def report(reporting_options)
     timelog_application = TimelogApplication.new(TIMELOG_FILE_NAME)
     timelog_application.report(reporting_options)
+  end
+
+  def options(opts)
+    OpenStruct.new(opts)
   end
 
 end
