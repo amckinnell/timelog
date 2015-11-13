@@ -1,8 +1,9 @@
 require "spec_helper"
-require_relative "../lib/timelog"
 require_relative "../lib/timelog_application"
 
 RSpec.describe TimelogApplication do
+  TIMELOG_FILE_NAME = "timelog.txt"
+
   before do
     File.delete(TIMELOG_FILE_NAME) if File.exist?(TIMELOG_FILE_NAME)
 
