@@ -20,28 +20,43 @@ RSpec.describe TimelogApplication do
   end
 
   it "project total" do
-    rpt = run("project-1").split("\n")[-1]
-    expect(rpt.split[1].to_f).to eq(17.5)
+    reporting_options = OpenStruct.new(project: "project-1")
+
+    result = report(reporting_options).split("\n")[-1]
+
+    expect(result.split[1].to_f).to eq(17.5)
   end
 
   it "project total for missing project" do
-    rpt = run("project-2").split("\n")[-1]
-    expect(rpt.split[1].to_f).to eq(0)
+    reporting_options = OpenStruct.new(project: "project-2")
+
+    result = report(reporting_options).split("\n")[-1]
+
+    expect(result.split[1].to_f).to eq(0)
   end
 
   it "user total" do
-    rpt = run("--user fred project-1").split("\n")[-1]
-    expect(rpt.split[1].to_f).to eq(6)
+    reporting_options = OpenStruct.new(user: "fred", project: "project-1")
+
+    result = report(reporting_options).split("\n")[-1]
+
+    expect(result.split[1].to_f).to eq(6)
   end
 
   it "user total for missing user" do
-    rpt = run("--user harry project-1").split("\n")[-1]
-    expect(rpt.split[1].to_f).to eq(0)
+    reporting_options = OpenStruct.new(user: "harry", project: "project-1")
+
+    result = report(reporting_options).split("\n")[-1]
+
+    expect(result.split[1].to_f).to eq(0)
   end
 
   it "user total for missing project" do
-    rpt = run("--user fred project-2").split("\n")[-1]
-    expect(rpt.split[1].to_f).to eq(0)
+    reporting_options = OpenStruct.new(user: "fred", project: "project-2")
+
+    result = report(reporting_options).split("\n")[-1]
+
+    expect(result.split[1].to_f).to eq(0)
   end
 
   def run(options)
