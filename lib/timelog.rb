@@ -9,6 +9,8 @@ require "ostruct"
 require "optparse"
 require "optparse/date"
 
+require_relative "timelog_application"
+
 def parse_options(argv)
   options = OpenStruct.new
   OptionParser.new do |opts|
@@ -51,38 +53,14 @@ TIMELOG_FOLDER = ENV["TL_DIR"] || "/var/log/timelog"
 TIMELOG_FILE_NAME = "timelog.txt"
 TIMELOG_FILE = TIMELOG_FOLDER + "/" + TIMELOG_FILE_NAME
 
-def report(options)
-  records = IO.readlines(TIMELOG_FILE)
-  records = records.grep(/^#{options.project},/)
-  records = records.grep(/,#{options.user},/) if options.user
-  months = Hash.new(0.0)
-  total = 0.0
-  records.each do |record|
-    _project, _user, date, hours = record.split(/,/)
-    total += hours.to_f
-    y, m, _d = date.split(/-/)
-    months["#{y}-#{m}"] += hours.to_f
-  end
-  lines = months.keys.sort.map do |month|
-    format("%-7s %8.1f", month, months[month])
-  end
-  lines << format("Total   %8.1f", total)
-  lines.join("\n")
-end
-
-def log(options)
-  options.user ||= ENV["USERNAME"]
-  options.date ||= Date.today.to_s
-  File.open TIMELOG_FILE, "a+" do |f|
-    f.puts "#{options.project},#{options.user},#{options.date},#{options.hours}"
-  end
-end
-
 if __FILE__ == $PROGRAM_NAME
   options = parse_options(ARGV)
+
+  timelog_application = TimelogApplication.new(TIMELOG_FILE)
+
   if options.hours.nil?
-    puts report(options)
+    puts timelog_application.report(options)
   else
-    log(options)
+    timelog_application.log(options)
   end
 end
