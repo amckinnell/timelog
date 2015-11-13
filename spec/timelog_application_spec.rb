@@ -20,27 +20,27 @@ RSpec.describe TimelogApplication do
   end
 
   it "project total" do
-    rpt = `ruby lib/timelog.rb project-1`.split("\n")[-1]
+    rpt = run("project-1").split("\n")[-1]
     expect(rpt.split[1].to_f).to eq(17.5)
   end
 
   it "project total for missing project" do
-    rpt = `ruby lib/timelog.rb project-2`.split("\n")[-1]
+    rpt = run("project-2").split("\n")[-1]
     expect(rpt.split[1].to_f).to eq(0)
   end
 
   it "user total" do
-    rpt = `ruby lib/timelog.rb --user fred project-1`.split("\n")[-1]
+    rpt = run("--user fred project-1").split("\n")[-1]
     expect(rpt.split[1].to_f).to eq(6)
   end
 
   it "user total for missing user" do
-    rpt = `ruby lib/timelog.rb --user harry project-1`.split("\n")[-1]
+    rpt = run("--user harry project-1").split("\n")[-1]
     expect(rpt.split[1].to_f).to eq(0)
   end
 
   it "user total for missing project" do
-    rpt = `ruby lib/timelog.rb --user fred project-2`.split("\n")[-1]
+    rpt = run("--user fred project-2").split("\n")[-1]
     expect(rpt.split[1].to_f).to eq(0)
   end
 
