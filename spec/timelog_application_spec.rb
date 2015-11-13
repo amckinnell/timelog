@@ -6,10 +6,10 @@ RSpec.describe TimelogApplication do
   before do
     @timelog_size = File.size(TIMELOG_FILE) if File.exist?(TIMELOG_FILE)
     File.delete(TIMELOG_FILE_NAME) if File.exist?(TIMELOG_FILE_NAME)
-    ENV["TL_DIR"] = "."
-    expect(`ruby lib/timelog.rb -u fred -h 6 project-1`).to eq("")
-    expect(`ruby lib/timelog.rb -u jim -h 7 project-1`).to eq("")
-    expect(`ruby lib/timelog.rb -u alice -h 4.5 project-1`).to eq("")
+
+    log(OpenStruct.new(user: "fred", project: "project-1", hours: 6.0))
+    log(OpenStruct.new(user: "jim", project: "project-1", hours: 7.0))
+    log(OpenStruct.new(user: "alice", project: "project-1", hours: 4.5))
   end
 
   after do
@@ -57,10 +57,6 @@ RSpec.describe TimelogApplication do
     result = report(reporting_options).split("\n")[-1]
 
     expect(result.split[1].to_f).to eq(0)
-  end
-
-  def run(options)
-    `ruby lib/timelog.rb #{options}`
   end
 
   def log(logging_options)
