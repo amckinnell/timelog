@@ -32,14 +32,13 @@ class TimelogApplication
   end
 
   def total_hours(records)
-    total = 0.0
-
-    records.each do |record|
-      _project, _user, _date, hours = record.split(/,/)
-      total += hours.to_f
+    records.reduce(0.0) do |total, record|
+      total + hours(record)
     end
+  end
 
-    total
+  def hours(record)
+    record.split(/,/)[-1].to_f
   end
 
   def log(options)
