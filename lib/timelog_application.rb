@@ -50,7 +50,7 @@ class TimelogApplication
   def log(options)
     options.user ||= ENV["USERNAME"]
     options.date ||= Date.today.to_s
-    record= "#{options.project},#{options.user},#{options.date},#{options.hours}"
+    record = "#{options.project},#{options.user},#{options.date},#{options.hours}"
 
     write(record)
   end
@@ -58,12 +58,11 @@ class TimelogApplication
   private
 
   def read(options)
-    records = IO.readlines(@timelog_filename)
-
-    records = records.grep(/^#{options.project},/)
-    records = records.grep(/,#{options.user},/) if options.user
-
-    records
+    if options.user then
+      read_for_user(options.user, options.project)
+    else
+      read_for_project(options.project)
+    end
   end
 
   def read_for_user(user, project)
