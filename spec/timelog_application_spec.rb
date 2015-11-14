@@ -49,37 +49,34 @@ RSpec.describe TimelogApplication do
   end
 
   describe "revised" do
+    subject { TimelogApplication.new(SPEC_TIMELOG_FILE_NAME) }
+
     it "project total" do
-      timelog_application = TimelogApplication.new(SPEC_TIMELOG_FILE_NAME)
-      total_hours = timelog_application.total_hours_for_project(project: "project-1")
+      total_hours = subject.total_hours_for_project(project: "project-1")
 
       expect(total_hours).to eq(17.5)
     end
 
     it "project total for missing project" do
-      timelog_application = TimelogApplication.new(SPEC_TIMELOG_FILE_NAME)
-      total_hours = timelog_application.total_hours_for_project(project: "project-2")
+      total_hours = subject.total_hours_for_project(project: "project-2")
 
       expect(total_hours).to eq(0)
     end
 
     it "user total" do
-      timelog_application = TimelogApplication.new(SPEC_TIMELOG_FILE_NAME)
-      total_hours = timelog_application.total_hours_for_user(user: "fred", project: "project-1")
+      total_hours = subject.total_hours_for_user(user: "fred", project: "project-1")
 
       expect(total_hours).to eq(6)
     end
 
     it "user total for missing user" do
-      timelog_application = TimelogApplication.new(SPEC_TIMELOG_FILE_NAME)
-      total_hours = timelog_application.total_hours_for_user(user: "harry", project: "project-1")
+      total_hours = subject.total_hours_for_user(user: "harry", project: "project-1")
 
       expect(total_hours).to eq(0)
     end
 
     it "user total for missing project" do
-      timelog_application = TimelogApplication.new(SPEC_TIMELOG_FILE_NAME)
-      total_hours = timelog_application.total_hours_for_user(user: "fred", project: "project-2")
+      total_hours = subject.total_hours_for_user(user: "fred", project: "project-2")
 
       expect(total_hours).to eq(0)
     end
