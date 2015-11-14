@@ -4,9 +4,8 @@ class TimelogApplication
   end
 
   def report(options)
-    records = IO.readlines(@timelog_filename)
-    records = records.grep(/^#{options.project},/)
-    records = records.grep(/,#{options.user},/) if options.user
+    records = read(options)
+
     months = Hash.new(0.0)
     total = 0.0
     records.each do |record|
@@ -15,9 +14,11 @@ class TimelogApplication
       y, m, _d = date.split(/-/)
       months["#{y}-#{m}"] += hours.to_f
     end
+
     lines = months.keys.sort.map do |month|
       format("%-7s %8.1f", month, months[month])
     end
+
     lines << format("Total   %8.1f", total)
     lines.join("\n")
   end
@@ -25,8 +26,23 @@ class TimelogApplication
   def log(options)
     options.user ||= ENV["USERNAME"]
     options.date ||= Date.today.to_s
-    File.open @timelog_filename, "a+" do |f|
-      f.puts "#{options.project},#{options.user},#{options.date},#{options.hours}"
-    end
+    record= "#{options.project},#{options.user},#{options.date},#{options.hours}"
+
+    write(record)
+  end
+
+  private
+
+  def read(options)
+    records = IO.readlines(@timelog_filename)
+
+    records = records.grep(/^#{options.project},/)
+    records = records.grep(/,#{options.user},/) if options.user
+
+    records
+  end
+
+  def write(record)
+    File.open(@timelog_filename, "a+") { |f| f.puts record }
   end
 end
