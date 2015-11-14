@@ -16,34 +16,70 @@ RSpec.describe TimelogApplication do
     File.delete(SPEC_TIMELOG_FILE_NAME) if File.exist?(SPEC_TIMELOG_FILE_NAME)
   end
 
-  it "project total" do
-    result = report(project: "project-1").split("\n")[-1]
+  describe "original" do
+    it "project total" do
+      result = report(project: "project-1").split("\n")[-1]
 
-    expect(result.split[1].to_f).to eq(17.5)
+      expect(result.split[1].to_f).to eq(17.5)
+    end
+
+    it "project total for missing project" do
+      result = report(project: "project-2").split("\n")[-1]
+
+      expect(result.split[1].to_f).to eq(0)
+    end
+
+    it "user total" do
+      result = report(user: "fred", project: "project-1").split("\n")[-1]
+
+      expect(result.split[1].to_f).to eq(6)
+    end
+
+    it "user total for missing user" do
+      result = report(user: "harry", project: "project-1").split("\n")[-1]
+
+      expect(result.split[1].to_f).to eq(0)
+    end
+
+    it "user total for missing project" do
+      result = report(user: "fred", project: "project-2").split("\n")[-1]
+
+      expect(result.split[1].to_f).to eq(0)
+    end
   end
 
-  it "project total for missing project" do
-    result = report(project: "project-2").split("\n")[-1]
+  describe "revised" do
+    it "project total" do
+      timelog_application = TimelogApplication.new(SPEC_TIMELOG_FILE_NAME)
+      total_hours = timelog_application.total_hours_for_project(project: "project-1")
 
-    expect(result.split[1].to_f).to eq(0)
-  end
+      expect(total_hours).to eq(17.5)
+    end
 
-  it "user total" do
-    result = report(user: "fred", project: "project-1").split("\n")[-1]
+    it "project total for missing project" do
+      timelog_application = TimelogApplication.new(SPEC_TIMELOG_FILE_NAME)
+      total_hours = timelog_application.total_hours_for_project(project: "project-2")
 
-    expect(result.split[1].to_f).to eq(6)
-  end
+      expect(total_hours).to eq(0)
+    end
 
-  it "user total for missing user" do
-    result = report(user: "harry", project: "project-1").split("\n")[-1]
+    it "user total" do
+      result = report(user: "fred", project: "project-1").split("\n")[-1]
 
-    expect(result.split[1].to_f).to eq(0)
-  end
+      expect(result.split[1].to_f).to eq(6)
+    end
 
-  it "user total for missing project" do
-    result = report(user: "fred", project: "project-2").split("\n")[-1]
+    it "user total for missing user" do
+      result = report(user: "harry", project: "project-1").split("\n")[-1]
 
-    expect(result.split[1].to_f).to eq(0)
+      expect(result.split[1].to_f).to eq(0)
+    end
+
+    it "user total for missing project" do
+      result = report(user: "fred", project: "project-2").split("\n")[-1]
+
+      expect(result.split[1].to_f).to eq(0)
+    end
   end
 
   def log(logging_options)
