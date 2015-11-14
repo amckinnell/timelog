@@ -44,6 +44,7 @@ class TimelogApplication
   def log(options)
     options.user ||= ENV["USERNAME"]
     options.date ||= Date.today.to_s
+
     record = "#{options.project},#{options.user},#{options.date},#{options.hours}"
 
     write(record)
