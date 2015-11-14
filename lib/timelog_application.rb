@@ -24,21 +24,16 @@ class TimelogApplication
   end
 
   def total_hours_for_project(project:)
-    records = read_for_project(project)
-
-    total = 0.0
-    records.each do |record|
-      _project, _user, _date, hours = record.split(/,/)
-      total += hours.to_f
-    end
-
-    total
+    total_hours(read_for_project(project))
   end
 
   def total_hours_for_user(user:, project:)
-    records = read_for_user(user, project)
+    total_hours(read_for_user(user, project))
+  end
 
+  def total_hours(records)
     total = 0.0
+
     records.each do |record|
       _project, _user, _date, hours = record.split(/,/)
       total += hours.to_f
