@@ -58,6 +58,6 @@ different persistence mechanism, but which otherwise has the same features.
 
 #### Exercise 16.7 Open Secrets
 
-  * Fix these open secrets by introducing a new class to wrap the SCV strings.
-  Look for opportunities to move code into the new class. Can ypou use the new
+  * Fix these open secrets by introducing a new class to wrap the CSV strings.
+  Look for opportunities to move code into the new class. Can you use the new
   class to simplify any of the tests?
