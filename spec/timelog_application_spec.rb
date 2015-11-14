@@ -64,21 +64,24 @@ RSpec.describe TimelogApplication do
     end
 
     it "user total" do
-      result = report(user: "fred", project: "project-1").split("\n")[-1]
+      timelog_application = TimelogApplication.new(SPEC_TIMELOG_FILE_NAME)
+      total_hours = timelog_application.total_hours_for_user(user: "fred", project: "project-1")
 
-      expect(result.split[1].to_f).to eq(6)
+      expect(total_hours).to eq(6)
     end
 
     it "user total for missing user" do
-      result = report(user: "harry", project: "project-1").split("\n")[-1]
+      timelog_application = TimelogApplication.new(SPEC_TIMELOG_FILE_NAME)
+      total_hours = timelog_application.total_hours_for_user(user: "harry", project: "project-1")
 
-      expect(result.split[1].to_f).to eq(0)
+      expect(total_hours).to eq(0)
     end
 
     it "user total for missing project" do
-      result = report(user: "fred", project: "project-2").split("\n")[-1]
+      timelog_application = TimelogApplication.new(SPEC_TIMELOG_FILE_NAME)
+      total_hours = timelog_application.total_hours_for_user(user: "fred", project: "project-2")
 
-      expect(result.split[1].to_f).to eq(0)
+      expect(total_hours).to eq(0)
     end
   end
 

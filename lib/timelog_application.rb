@@ -35,6 +35,18 @@ class TimelogApplication
     total
   end
 
+  def total_hours_for_user(user:, project:)
+    records = read_for_user(user, project)
+
+    total = 0.0
+    records.each do |record|
+      _project, _user, _date, hours = record.split(/,/)
+      total += hours.to_f
+    end
+
+    total
+  end
+
   def log(options)
     options.user ||= ENV["USERNAME"]
     options.date ||= Date.today.to_s
@@ -52,6 +64,10 @@ class TimelogApplication
     records = records.grep(/,#{options.user},/) if options.user
 
     records
+  end
+
+  def read_for_user(user, project)
+    read_for_project(project).grep(/,#{user},/)
   end
 
   def read_for_project(project)
